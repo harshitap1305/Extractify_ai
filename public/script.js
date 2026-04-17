@@ -1,19 +1,22 @@
 let finalExtractedData = null;
 
 // --- Dashboard Navigation Logic ---
-const navNewCrawl = document.getElementById('nav-new-crawl');
+const navNewCrawl  = document.getElementById('nav-new-crawl');
 const navNewsCrawl = document.getElementById('nav-news-crawl');
-const navHistory = document.getElementById('nav-history');
+const navTwitter   = document.getElementById('nav-twitter');
+const navHistory   = document.getElementById('nav-history');
 
-const viewCrawl = document.getElementById('view-crawl');
-const viewNews = document.getElementById('view-news');
-const viewHistory = document.getElementById('view-history');
+const viewCrawl    = document.getElementById('view-crawl');
+const viewNews     = document.getElementById('view-news');
+const viewTwitter  = document.getElementById('view-twitter');
+const viewHistory  = document.getElementById('view-history');
 const historyContainer = document.getElementById('history-container');
 
 function switchView(viewName) {
-    [navNewCrawl, navNewsCrawl, navHistory].forEach(el => el.classList.remove('active'));
-    viewCrawl.style.display = 'none';
-    viewNews.style.display = 'none';
+    [navNewCrawl, navNewsCrawl, navTwitter, navHistory].forEach(el => el.classList.remove('active'));
+    viewCrawl.style.display   = 'none';
+    viewNews.style.display    = 'none';
+    viewTwitter.style.display = 'none';
     viewHistory.style.display = 'none';
 
     if (viewName === 'crawl') {
@@ -22,6 +25,9 @@ function switchView(viewName) {
     } else if (viewName === 'news') {
         navNewsCrawl.classList.add('active');
         viewNews.style.display = 'grid';
+    } else if (viewName === 'twitter') {
+        navTwitter.classList.add('active');
+        viewTwitter.style.display = 'grid';
     } else if (viewName === 'history') {
         navHistory.classList.add('active');
         viewHistory.style.display = 'grid';
@@ -29,14 +35,33 @@ function switchView(viewName) {
     }
 }
 
-navNewCrawl.addEventListener('click', () => switchView('crawl'));
+navNewCrawl.addEventListener('click',  () => switchView('crawl'));
 navNewsCrawl.addEventListener('click', () => switchView('news'));
-navHistory.addEventListener('click', () => switchView('history'));
+navTwitter.addEventListener('click',   () => switchView('twitter'));
+navHistory.addEventListener('click',   () => switchView('history'));
 
 // Duplicate extraction form bindings specifically for 'extract-news-form'
 document.getElementById('extract-news-form').addEventListener('submit', async (e) => {
     e.preventDefault();
-    // Logic for news extraction
+    // Logic for news extraction — handled by the second listener below
+});
+
+// ── Twitter Depth Slider Live Label ──────────────────────────────────────────
+const twitterDepthSlider = document.getElementById('twitter-depth');
+const twitterDepthLabel  = document.getElementById('twitter-depth-label');
+twitterDepthSlider.addEventListener('input', () => {
+    twitterDepthLabel.textContent = twitterDepthSlider.value;
+    twitterDepthLabel.style.transform = 'scale(1.2)';
+    setTimeout(() => { twitterDepthLabel.style.transform = 'scale(1)'; }, 150);
+});
+
+// ── Twitter Max Posts Slider Live Label ───────────────────────────────────────
+const twitterMaxPostsSlider = document.getElementById('twitter-max-posts');
+const twitterMaxPostsLabel  = document.getElementById('twitter-max-posts-label');
+twitterMaxPostsSlider.addEventListener('input', () => {
+    twitterMaxPostsLabel.textContent = twitterMaxPostsSlider.value;
+    twitterMaxPostsLabel.style.transform = 'scale(1.2)';
+    setTimeout(() => { twitterMaxPostsLabel.style.transform = 'scale(1)'; }, 150);
 });
 
 window.toggleEngineMode = function () {
@@ -311,11 +336,11 @@ function initiateDownload(dataArray, type = 'json') {
 
 // Download Handlers (Live Pane)
 document.getElementById('btn-export-json').addEventListener('click', () => initiateDownload(finalExtractedData, 'json'));
-document.getElementById('btn-export-csv').addEventListener('click', () => initiateDownload(finalExtractedData, 'csv'));
+document.getElementById('btn-export-csv').addEventListener('click',  () => initiateDownload(finalExtractedData, 'csv'));
 
 // Download Handlers (News Scraper Pane)
 document.getElementById('btn-export-news-json').addEventListener('click', () => initiateDownload(finalNewsExtractedData, 'json'));
-document.getElementById('btn-export-news-csv').addEventListener('click', () => initiateDownload(finalNewsExtractedData, 'csv'));
+document.getElementById('btn-export-news-csv').addEventListener('click',  () => initiateDownload(finalNewsExtractedData, 'csv'));
 
 // Download Handlers (History Async Pane)
 window.downloadHistoryJSON = async (jobId) => {
@@ -326,3 +351,200 @@ window.downloadHistoryCSV = async (jobId) => {
     const res = await fetch(`/api/jobs/${jobId}/export`);
     initiateDownload(await res.json(), 'csv');
 };
+
+// ── Twitter / X Scraper Logic ─────────────────────────────────────────────────
+
+let finalTwitterData  = null;
+let activeTwitterJobId = null;
+let activeTwitterSSE   = null;
+
+function resetTwitterUI() {
+    const submitBtn = document.getElementById('twitter-submit-btn');
+    const stopBtn   = document.getElementById('twitter-stop-btn');
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('btn-loading');
+    stopBtn.style.display = 'none';
+    activeTwitterJobId = null;
+    if (activeTwitterSSE) { activeTwitterSSE.close(); activeTwitterSSE = null; }
+}
+
+// Stop button handler
+document.getElementById('twitter-stop-btn').addEventListener('click', async () => {
+    if (!activeTwitterJobId) return;
+    const stopBtn     = document.getElementById('twitter-stop-btn');
+    const statusBadge = document.getElementById('twitter-status-badge');
+    const jsonOutput  = document.getElementById('twitter-json-output');
+
+    stopBtn.disabled  = true;
+    stopBtn.textContent = 'Stopping...';
+
+    try {
+        await fetch(`/api/twitter/jobs/${activeTwitterJobId}/cancel`, { method: 'DELETE' });
+    } catch (_) {}
+
+    jsonOutput.textContent += `\n[STOPPED] Job cancelled by user.`;
+    statusBadge.className   = 'badge error';
+    statusBadge.textContent = 'Stopped';
+
+    // Show export if we have partial data
+    const exportSection = document.getElementById('twitter-export-section');
+    const tweetCountEl  = document.getElementById('twitter-tweet-count');
+    if (finalTwitterData && finalTwitterData.length > 0) {
+        tweetCountEl.textContent = `🐦 ${finalTwitterData.length} tweet${finalTwitterData.length !== 1 ? 's' : ''} collected (partial)`;
+        if (exportSection) exportSection.style.display = 'flex';
+    }
+    resetTwitterUI();
+});
+
+document.getElementById('extract-twitter-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const urlInput      = document.getElementById('twitter-url').value;
+    const depthInput    = document.getElementById('twitter-depth').value;
+    const maxPostsInput = document.getElementById('twitter-max-posts').value;
+    const maxDuration   = document.getElementById('twitter-max-duration').value;
+    const submitBtn     = document.getElementById('twitter-submit-btn');
+    const stopBtn       = document.getElementById('twitter-stop-btn');
+    const statusBadge   = document.getElementById('twitter-status-badge');
+    const jsonOutput    = document.getElementById('twitter-json-output');
+    const exportSection = document.getElementById('twitter-export-section');
+    const tweetCountEl  = document.getElementById('twitter-tweet-count');
+
+    finalTwitterData   = null;
+    activeTwitterJobId = null;
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('btn-loading');
+    stopBtn.style.display = 'flex';
+    stopBtn.disabled      = false;
+    stopBtn.innerHTML     = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Stop';
+    statusBadge.className    = 'badge processing';
+    statusBadge.textContent  = 'Scraping';
+    jsonOutput.style.color   = '#FFF';
+
+    const durationLabel = maxDuration === '0' ? 'No limit' : `${maxDuration}h max`;
+    jsonOutput.textContent = `Connecting to Twitter scraper cluster...\nSeed: ${urlInput}\nDepth: ${depthInput}  |  Max Posts: ${maxPostsInput}  |  Duration: ${durationLabel}\n${'─'.repeat(50)}\n`;
+    if (exportSection) exportSection.style.display = 'none';
+
+    try {
+        const response = await fetch('/api/twitter/scrape', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url:               urlInput,
+                depth:             parseInt(depthInput, 10),
+                maxTweetsPerUrl:   parseInt(maxPostsInput, 10),
+                maxDurationHours:  parseFloat(maxDuration),
+            })
+        });
+
+        const config = await response.json();
+        if (!response.ok) throw new Error(config.error || 'Server rejected Twitter scrape request');
+
+        const jobId = config.jobId;
+        activeTwitterJobId = jobId;
+        jsonOutput.textContent += `[SYSTEM] Job ${jobId} started. Streaming progress...\n`;
+
+        try {
+            activeTwitterSSE = new EventSource(`/api/twitter/status?jobId=${jobId}`);
+
+            activeTwitterSSE.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'progress') {
+                    const prefix = data.status ? `[${data.status.toUpperCase()}] ` : '';
+                    jsonOutput.textContent += `${prefix}${data.message}\n`;
+                    jsonOutput.parentElement.scrollTop = jsonOutput.parentElement.scrollHeight;
+
+                    // Show live count during scraping
+                    const match = data.message.match(/(\d+) unique tweet/);
+                    if (match) tweetCountEl.textContent = `🐦 ${match[1]} tweets so far...`;
+
+                } else if (data.type === 'result') {
+                    finalTwitterData = data.data;
+                    const count = Array.isArray(data.data) ? data.data.length : 0;
+
+                    statusBadge.className  = 'badge success';
+                    statusBadge.textContent = 'Complete';
+                    jsonOutput.style.color  = '#DCCCAC';
+                    jsonOutput.textContent += `\n${'═'.repeat(50)}\n🐦 SCRAPED ${count} TWEETS\n${'═'.repeat(50)}\n`;
+                    jsonOutput.textContent += JSON.stringify(data.data, null, 2);
+                    tweetCountEl.textContent = `🐦 ${count} tweet${count !== 1 ? 's' : ''} collected`;
+
+                    resetTwitterUI();
+                    if (exportSection) exportSection.style.display = 'flex';
+                    jsonOutput.parentElement.scrollTop = jsonOutput.parentElement.scrollHeight;
+
+                } else if (data.type === 'error') {
+                    throw new Error(data.error);
+                }
+            };
+
+            activeTwitterSSE.onerror = function () {
+                if (activeTwitterSSE && activeTwitterSSE.readyState === EventSource.CLOSED) return;
+                statusBadge.className  = 'badge error';
+                statusBadge.textContent = 'Stream Error';
+                jsonOutput.style.color  = '#E46464';
+                jsonOutput.textContent += `\n[SSE ERROR] Connection to server lost.`;
+                resetTwitterUI();
+            };
+
+        } catch (streamError) {
+            statusBadge.className  = 'badge error';
+            statusBadge.textContent = 'Failed';
+            jsonOutput.style.color  = '#E46464';
+            jsonOutput.textContent += `\n[FATAL] ${streamError.message}`;
+            resetTwitterUI();
+        }
+
+    } catch (networkError) {
+        statusBadge.className  = 'badge error';
+        statusBadge.textContent = 'Network Error';
+        jsonOutput.style.color  = '#E46464';
+        jsonOutput.textContent += `\n[NETWORK ERROR] ${networkError.message}`;
+        resetTwitterUI();
+    }
+});
+
+// ── Twitter Export Helpers ───────────────────────────────────────────────────
+
+function initiateTwitterDownload(dataArray, type = 'json') {
+    if (!dataArray || dataArray.length === 0) {
+        alert('No tweet data available to export.');
+        return;
+    }
+    if (type === 'json') {
+        const blob = new Blob([JSON.stringify(dataArray, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `twitter_data_${Date.now()}.json`;
+        link.click();
+    } else {
+        // Flatten tweet objects for CSV
+        const flat = dataArray.map(t => ({
+            tweet_url:    t.tweetUrl   || '',
+            source_url:   t.sourceUrl  || '',
+            depth:        t.depth      || 1,
+            handle:       t.handle     || '',
+            display_name: t.displayName || '',
+            posted_at:    t.postedAt   || '',
+            text:         t.text       || '',
+            likes:        t.stats?.like         || '',
+            retweets:     t.stats?.retweet      || '',
+            replies:      t.stats?.reply        || '',
+            views:        t.stats?.views        || '',
+            media:        Array.isArray(t.media) ? t.media.join(' | ') : '',
+            quote_tweet:  t.quoteTweet || ''
+        }));
+        const csvString = Papa.unparse(flat);
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `twitter_data_${Date.now()}.csv`;
+        link.click();
+    }
+}
+
+document.getElementById('btn-export-twitter-json').addEventListener('click', () => initiateTwitterDownload(finalTwitterData, 'json'));
+document.getElementById('btn-export-twitter-csv').addEventListener('click',  () => initiateTwitterDownload(finalTwitterData, 'csv'));
+
