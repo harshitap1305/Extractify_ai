@@ -622,3 +622,103 @@ code {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
+
+/* ── Twitter / X Tab Styles ──────────────────────────────────────────────── */
+
+:root {
+  --twitter-blue: #1D9BF0;
+  --twitter-dark: #0f1923;
+}
+
+/* Sidebar active state for Twitter — uses twitter blue accent */
+#nav-twitter.active {
+  border-left-color: var(--twitter-blue);
+}
+#nav-twitter.active svg {
+  color: var(--twitter-blue);
+  opacity: 1;
+}
+
+/* Twitter submit button — blue gradient */
+.twitter-btn {
+  background: linear-gradient(135deg, var(--twitter-blue), #0d7bbf) !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+.twitter-btn:hover {
+  background: linear-gradient(135deg, #0d7bbf, #0a5a8c) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px var(--twitter-blue);
+}
+
+/* Depth badge pill shown next to the range slider */
+.depth-badge {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--twitter-blue);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(29, 155, 240, 0.4);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+/* Depth legend */
+.depth-hint {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--primary);
+  opacity: 0.65;
+}
+
+/* Tweet count chip shown in the export footer */
+.tweet-count-chip {
+  background: rgba(29, 155, 240, 0.12);
+  color: var(--twitter-blue);
+  border: 1px solid rgba(29, 155, 240, 0.3);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto; /* push export buttons to the right */
+}
+
+/* Range input — general polish */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: rgba(84, 107, 65, 0.15);
+  border-radius: 10px;
+  height: 6px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+}
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--twitter-blue);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(29, 155, 240, 0.5);
+  transition: transform 0.2s ease;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
