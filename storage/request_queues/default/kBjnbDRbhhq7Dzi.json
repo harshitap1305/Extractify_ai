@@ -1,0 +1,9 @@
+{
+	"id": "kBjnbDRbhhq7Dzi",
+	"json": "{\"id\":\"kBjnbDRbhhq7Dzi\",\"url\":\"https://internshala.com/hire-talent\",\"loadedUrl\":\"https://internshala.com/hire-talent/\",\"uniqueKey\":\"https://internshala.com/hire-talent\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:05.568Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://internshala.com/hire-talent",
+	"url": "https://internshala.com/hire-talent"
+}

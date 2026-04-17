@@ -1,0 +1,9 @@
+{
+	"id": "87nRiLvecofRJEJ",
+	"json": "{\"id\":\"87nRiLvecofRJEJ\",\"url\":\"https://internshala.com/onlinedegrees?utm_source=is_web_hamburger\",\"loadedUrl\":\"https://internshala.com/onlinedegrees\",\"uniqueKey\":\"https://internshala.com/onlinedegrees\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:14.485Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://internshala.com/onlinedegrees",
+	"url": "https://internshala.com/onlinedegrees?utm_source=is_web_hamburger"
+}

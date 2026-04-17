@@ -1,0 +1,14 @@
+nohup: ignoring input
+◇ injected env (1) from .env // tip: ⌘ suppress logs { quiet: true }
+Extractify AI Engine with SQLite Persistence running at http://localhost:3000
+[32mINFO[39m [33m CheerioCrawler:[39m Starting the crawler.
+[32mINFO[39m [33m CheerioCrawler:[39m Skipping URLs in the handler for https://www.japantimes.co.jp/ due to the enqueueLinks limit of 99.
+[32mINFO[39m [33m CheerioCrawler:Statistics:[39m CheerioCrawler request statistics:[90m {"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":7140,"requestsFinishedPerMinute":51,"requestsFailedPerMinute":0,"requestTotalDurationMillis":364137,"requestsTotal":51,"crawlerRuntimeMillis":60284,"retryHistogram":[51]}[39m
+[32mINFO[39m [33m CheerioCrawler:AutoscaledPool:[39m state[90m {"currentConcurrency":2,"desiredConcurrency":6,"systemStatus":{"isSystemIdle":false,"memInfo":{"isOverloaded":false,"limitRatio":0.2,"actualRatio":0},"eventLoopInfo":{"isOverloaded":true,"limitRatio":0.7,"actualRatio":0.796},"cpuInfo":{"isOverloaded":false,"limitRatio":0.4,"actualRatio":0},"clientInfo":{"isOverloaded":false,"limitRatio":0.3,"actualRatio":0}}}[39m
+Could not parse CSS stylesheet
+Could not parse CSS stylesheet
+Could not parse CSS stylesheet
+Could not parse CSS stylesheet
+[32mINFO[39m [33m CheerioCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m CheerioCrawler:[39m Final request statistics:[90m {"requestsFinished":76,"requestsFailed":0,"retryHistogram":[76],"requestAvgFailedDurationMillis":null,"requestAvgFinishedDurationMillis":6016,"requestsFinishedPerMinute":56,"requestsFailedPerMinute":0,"requestTotalDurationMillis":457241,"requestsTotal":76,"crawlerRuntimeMillis":81247}[39m
+[32mINFO[39m [33m CheerioCrawler:[39m Finished! Total 76 requests: 76 succeeded, 0 failed.[90m {"terminal":true}[39m

@@ -1,0 +1,9 @@
+{
+	"id": "i0khMCgsAY1BEC0",
+	"json": "{\"id\":\"i0khMCgsAY1BEC0\",\"url\":\"https://internshala.com/onlinedegrees/online-mba/?utm_source=is_web_internshala-menu-dropdown&utm_campaign=online_degrees\",\"loadedUrl\":\"https://internshala.com/onlinedegrees/online-mba/\",\"uniqueKey\":\"https://internshala.com/onlinedegrees/online-mba\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:06:42.537Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://internshala.com/onlinedegrees/online-mba",
+	"url": "https://internshala.com/onlinedegrees/online-mba/?utm_source=is_web_internshala-menu-dropdown&utm_campaign=online_degrees"
+}

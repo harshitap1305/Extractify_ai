@@ -1,0 +1,9 @@
+{
+	"id": "fTtH6lGZO0srIsG",
+	"json": "{\"id\":\"fTtH6lGZO0srIsG\",\"url\":\"https://trainings.internshala.com/data-science-placement-guarantee-course?utm_source=is_web_internship-menu-dropdown\",\"loadedUrl\":\"https://trainings.internshala.com/data-science-placement-guarantee-course/?utm_source=is_web_internship-menu-dropdown\",\"uniqueKey\":\"https://trainings.internshala.com/data-science-placement-guarantee-course\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:05:11.702Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://trainings.internshala.com/data-science-placement-guarantee-course",
+	"url": "https://trainings.internshala.com/data-science-placement-guarantee-course?utm_source=is_web_internship-menu-dropdown"
+}

@@ -1,0 +1,41 @@
+{
+  "requestsFinished": 87,
+  "requestsFailed": 0,
+  "requestsRetries": 13,
+  "requestsFailedPerMinute": 0,
+  "requestsFinishedPerMinute": 7,
+  "requestMinDurationMillis": 2543,
+  "requestMaxDurationMillis": 62146,
+  "requestTotalFailedDurationMillis": 0,
+  "requestTotalFinishedDurationMillis": 1940705,
+  "crawlerStartedAt": "2026-04-12T05:54:43.153Z",
+  "crawlerFinishedAt": "2026-04-12T06:08:01.603Z",
+  "statsPersistedAt": "2026-04-12T06:08:01.604Z",
+  "crawlerRuntimeMillis": 798812,
+  "crawlerLastStartTimestamp": 1775973282792,
+  "requestRetryHistogram": [
+    74,
+    3,
+    10
+  ],
+  "statsId": 0,
+  "requestAvgFailedDurationMillis": null,
+  "requestAvgFinishedDurationMillis": 22307,
+  "requestTotalDurationMillis": 1940705,
+  "requestsTotal": 87,
+  "requestsWithStatusCode": {
+    "200": 110
+  },
+  "errors": {},
+  "retryErrors": {
+    "/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:64:68": {
+      "missing error code": {
+        "Error": {
+          "requestHandler timed out after 60 seconds.": {
+            "count": 23
+          }
+        }
+      }
+    }
+  }
+}

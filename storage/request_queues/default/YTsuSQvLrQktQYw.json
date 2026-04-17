@@ -1,0 +1,9 @@
+{
+	"id": "YTsuSQvLrQktQYw",
+	"json": "{\"id\":\"YTsuSQvLrQktQYw\",\"url\":\"https://internshala.com/internships-for-women/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships-for-women/\",\"uniqueKey\":\"https://internshala.com/internships-for-women\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:05:00.024Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://internshala.com/internships-for-women",
+	"url": "https://internshala.com/internships-for-women/?utm_source=is_menu_dropdown"
+}

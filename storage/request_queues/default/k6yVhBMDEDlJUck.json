@@ -1,0 +1,9 @@
+{
+	"id": "k6yVhBMDEDlJUck",
+	"json": "{\"id\":\"k6yVhBMDEDlJUck\",\"url\":\"https://internshala.com/registration/student\",\"loadedUrl\":\"https://internshala.com/registration/student\",\"uniqueKey\":\"https://internshala.com/registration/student\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:54:56.145Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://internshala.com/registration/student",
+	"url": "https://internshala.com/registration/student"
+}

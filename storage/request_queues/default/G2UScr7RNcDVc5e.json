@@ -1,0 +1,9 @@
+{
+	"id": "G2UScr7RNcDVc5e",
+	"json": "{\"id\":\"G2UScr7RNcDVc5e\",\"url\":\"https://trainings.internshala.com/web-development-course/?utm_source=is_web_internshala-menu-dropdown\",\"loadedUrl\":\"https://trainings.internshala.com/web-development-course/?utm_source=is_web_internshala-menu-dropdown\",\"uniqueKey\":\"https://trainings.internshala.com/web-development-course\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:06:09.147Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://trainings.internshala.com/web-development-course",
+	"url": "https://trainings.internshala.com/web-development-course/?utm_source=is_web_internshala-menu-dropdown"
+}

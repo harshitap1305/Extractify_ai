@@ -1,0 +1,21 @@
+[32mINFO[39m [33m PuppeteerCrawler:[39m Starting the crawler.
+Waiting for network idle...
+[33mWARN[39m [33m PuppeteerCrawler:[39m Reclaiming failed request back to the list or queue. TypeError: page.waitForTimeout is not a function
+    at PuppeteerCrawler.requestHandler [as userProvidedRequestHandler] (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/test-indian-express.js:14:28)
+    at async wrap (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:54:21)[90m {"id":"EsVqfnigtY99NQG","url":"https://indianexpress.com/article/world/iran-us-israel-war-live-updates-lebanon-attack-hezbollah-ceasefire-10626787/?ref=breaking_hp","retryCount":1}[39m
+Waiting for network idle...
+[33mWARN[39m [33m PuppeteerCrawler:[39m Reclaiming failed request back to the list or queue. TypeError: page.waitForTimeout is not a function
+    at PuppeteerCrawler.requestHandler [as userProvidedRequestHandler] (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/test-indian-express.js:14:28)
+    at async wrap (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:54:21)[90m {"id":"EsVqfnigtY99NQG","url":"https://indianexpress.com/article/world/iran-us-israel-war-live-updates-lebanon-attack-hezbollah-ceasefire-10626787/?ref=breaking_hp","retryCount":2}[39m
+Waiting for network idle...
+[33mWARN[39m [33m PuppeteerCrawler:[39m Reclaiming failed request back to the list or queue. TypeError: page.waitForTimeout is not a function
+    at PuppeteerCrawler.requestHandler [as userProvidedRequestHandler] (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/test-indian-express.js:14:28)
+    at async wrap (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:54:21)[90m {"id":"EsVqfnigtY99NQG","url":"https://indianexpress.com/article/world/iran-us-israel-war-live-updates-lebanon-attack-hezbollah-ceasefire-10626787/?ref=breaking_hp","retryCount":3}[39m
+Waiting for network idle...
+[31mERROR[39m[33m PuppeteerCrawler:[39m Request failed and reached maximum retries. TypeError: page.waitForTimeout is not a function
+    at PuppeteerCrawler.requestHandler [as userProvidedRequestHandler] (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/test-indian-express.js:14:28)
+    at async wrap (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:54:21)[90m {"id":"EsVqfnigtY99NQG","url":"https://indianexpress.com/article/world/iran-us-israel-war-live-updates-lebanon-attack-hezbollah-ceasefire-10626787/?ref=breaking_hp","method":"GET","uniqueKey":"https://indianexpress.com/article/world/iran-us-israel-war-live-updates-lebanon-attack-hezbollah-ceasefire-10626787?ref=breaking_hp"}[39m
+[32mINFO[39m [33m PuppeteerCrawler:[39m All requests from the queue have been processed, the crawler will shut down.
+[32mINFO[39m [33m PuppeteerCrawler:[39m Final request statistics:[90m {"requestsFinished":0,"requestsFailed":1,"retryHistogram":[null,null,null,1],"requestAvgFailedDurationMillis":6023,"requestAvgFinishedDurationMillis":null,"requestsFinishedPerMinute":0,"requestsFailedPerMinute":3,"requestTotalDurationMillis":6023,"requestsTotal":1,"crawlerRuntimeMillis":17288}[39m
+[32mINFO[39m [33m PuppeteerCrawler:[39m Error analysis:[90m {"totalErrors":1,"uniqueErrors":1,"mostCommonErrors":["1x: page.waitForTimeout is not a function (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/test-indian-express.js:14:28)"]}[39m
+[32mINFO[39m [33m PuppeteerCrawler:[39m Finished! Total 1 requests: 0 succeeded, 1 failed.[90m {"terminal":true}[39m

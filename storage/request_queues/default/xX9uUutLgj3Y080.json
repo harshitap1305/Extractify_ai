@@ -1,0 +1,9 @@
+{
+	"id": "xX9uUutLgj3Y080",
+	"json": "{\"id\":\"xX9uUutLgj3Y080\",\"url\":\"https://internshala.com/internships/international-internship/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships/international-internship/\",\"uniqueKey\":\"https://internshala.com/internships/international-internship\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":2,\"errorMessages\":[\"Error: requestHandler timed out after 60 seconds.\\n    at Timeout._onTimeout (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:64:68)\\n    at listOnTimeout (node:internal/timers:588:17)\\n    at process.processTimers (node:internal/timers:523:7)\",\"Error: requestHandler timed out after 60 seconds.\\n    at Timeout._onTimeout (/home/harshita-patidar/Projects/UG_Proejct/Extractify_ai/node_modules/@apify/timeout/cjs/index.cjs:64:68)\\n    at listOnTimeout (node:internal/timers:588:17)\\n    at process.processTimers (node:internal/timers:523:7)\"],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:03:44.661Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 2,
+	"uniqueKey": "https://internshala.com/internships/international-internship",
+	"url": "https://internshala.com/internships/international-internship/?utm_source=is_menu_dropdown"
+}
