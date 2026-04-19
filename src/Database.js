@@ -57,6 +57,30 @@ db.exec(`
     scraped_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(job_id) REFERENCES twitter_jobs(id)
   );
+  -- ── Quora scraper tables ───────────────────────────────────────────────────
+
+  CREATE TABLE IF NOT EXISTS quora_jobs (
+    id          TEXT PRIMARY KEY,
+    seed_url    TEXT NOT NULL,
+    depth       INTEGER NOT NULL DEFAULT 1,
+    status      TEXT NOT NULL DEFAULT 'running',
+    post_count  INTEGER DEFAULT 0,
+    created_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
+
+  CREATE TABLE IF NOT EXISTS quora_results (
+    id           INTEGER PRIMARY KEY AUTOINCREMENT,
+    job_id       TEXT    NOT NULL,
+    url          TEXT,
+    source_url   TEXT,
+    depth        INTEGER,
+    author       TEXT,
+    title        TEXT,
+    content      TEXT,
+    upvotes      TEXT,
+    scraped_at   DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(job_id) REFERENCES quora_jobs(id)
+  );
 `);
 
 module.exports = db;

@@ -722,3 +722,70 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
 }
+
+/* ── Quora Crawler Tab Styles ──────────────────────────────────────────────── */
+
+:root {
+  --quora-red: #B92B27;
+  --quora-dark: #282829;
+}
+
+#nav-quora.active {
+  border-left-color: var(--quora-red);
+}
+#nav-quora.active svg {
+  color: var(--quora-red);
+  opacity: 1;
+}
+
+.quora-btn {
+  background: linear-gradient(135deg, var(--quora-red), #93221f) !important;
+  color: #fff !important;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+}
+.quora-btn:hover {
+  background: linear-gradient(135deg, #93221f, #6e1a17) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px -10px var(--quora-red);
+}
+
+.quora-depth-badge {
+  min-width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--quora-red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  box-shadow: 0 4px 10px rgba(185, 43, 39, 0.4);
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.quora-post-count-chip {
+  background: rgba(185, 43, 39, 0.12);
+  color: var(--quora-red);
+  border: 1px solid rgba(185, 43, 39, 0.3);
+  padding: 0.35rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: auto;
+}
+
+#quora-depth::-webkit-slider-thumb, 
+#quora-max-posts::-webkit-slider-thumb {
+  background: var(--quora-red);
+  box-shadow: 0 2px 8px rgba(185, 43, 39, 0.5);
+}

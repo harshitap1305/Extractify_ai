@@ -8,6 +8,7 @@ const EventEmitter = require('events');
 const SinglePromptExtractor = require('./SinglePromptExtractor');
 const Workflow = require('./Workflow');
 const TwitterWorkflow = require('./TwitterWorkflow');
+const QuoraWorkflow = require('./QuoraWorkflow');
 const db = require('./Database');
 
 const app = express();
@@ -20,6 +21,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 const extractor = new SinglePromptExtractor();
 const engine = new Workflow(extractor);
 const twitterEngine = new TwitterWorkflow();
+const quoraEngine = new QuoraWorkflow();
 
 // Global Job Store exclusively for LIVE terminal logs (in-memory)
 // This clears out securely, while the actual jobs remain forever in SQLite.
@@ -29,6 +31,11 @@ const jobEmitter = new EventEmitter();
 // Separate in-memory store for Twitter jobs
 const activeTwitterLogs = new Map();
 const twitterEmitter = new EventEmitter();
+
+// Separate in-memory store for Quora jobs
+const activeQuoraLogs = new Map();
+const quoraEmitter = new EventEmitter();
+const cancelledQuoraJobs = new Set();
 
 
 // Background Job Dispatcher Route
@@ -339,6 +346,157 @@ app.get('/api/twitter/jobs/:id/results', (req, res) => {
             media:       r.media_json   ? JSON.parse(r.media_json)  : [],
             stats:       r.stats_json   ? JSON.parse(r.stats_json)  : {},
             quoteTweet:  r.quote_tweet,
+            scrapedAt:   r.scraped_at
+        }));
+
+        res.json(formatted);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// ── Quora Scraper Routes ──────────────────────────────────────────────────────
+
+app.delete('/api/quora/jobs/:id/cancel', (req, res) => {
+    const { id } = req.params;
+    cancelledQuoraJobs.add(id);
+    db.prepare("UPDATE quora_jobs SET status = 'cancelled' WHERE id = ?").run(id);
+    res.json({ ok: true, cancelled: id });
+});
+
+app.post('/api/quora/scrape', async (req, res) => {
+    const { url, depth } = req.body;
+
+    if (!url) {
+        return res.status(400).json({ error: 'A Quora URL is required.' });
+    }
+
+    const lowerUrl = url.toLowerCase();
+    if (!lowerUrl.includes('quora.com')) {
+        return res.status(400).json({ error: 'URL must be a quora.com address.' });
+    }
+
+    if (!process.env.QUORA_COOKIES) {
+        return res.status(500).json({
+            error: 'QUORA_COOKIES is not configured on the server. Add your exported cookies to the .env file.'
+        });
+    }
+
+    const maxDepth        = depth ? Math.min(parseInt(depth, 10), 5) : 1;
+    const maxDurationHours = req.body.maxDurationHours ? Math.min(parseFloat(req.body.maxDurationHours), 24) : 0;
+    const maxPostsPerUrl  = Number.MAX_SAFE_INTEGER;
+    const jobId            = uuidv4();
+
+    db.prepare('INSERT INTO quora_jobs (id, seed_url, depth, status) VALUES (?, ?, ?, ?)')
+        .run(jobId, url, maxDepth, 'running');
+
+    activeQuoraLogs.set(jobId, { status: 'running', logs: [], result: null, error: null });
+
+    setImmediate(async () => {
+        try {
+            const scraperConfig = {
+                maxDurationMs:  maxDurationHours ? Math.round(maxDurationHours * 3600 * 1000) : 0,
+                maxPostsPerUrl,
+                cooldownMs:     3000,
+                isCancelled:    () => cancelledQuoraJobs.has(jobId),
+            };
+
+            const posts = await quoraEngine.runJob(jobId, url, maxDepth, (progress) => {
+                const payload = { type: 'progress', message: progress.message, status: progress.status };
+                const state   = activeQuoraLogs.get(jobId);
+                if (state) state.logs.push(payload);
+                quoraEmitter.emit(`progress-${jobId}`, payload);
+            }, scraperConfig);
+
+            const state = activeQuoraLogs.get(jobId);
+            if (state) {
+                state.status = 'completed';
+                state.result = posts;
+            }
+            quoraEmitter.emit(`progress-${jobId}`, { type: 'result', data: posts });
+
+        } catch (err) {
+            console.error('[Quora Job Error]', err);
+            db.prepare('UPDATE quora_jobs SET status = ? WHERE id = ?').run('failed', jobId);
+
+            const state = activeQuoraLogs.get(jobId);
+            if (state) {
+                state.status = 'failed';
+                state.error  = err.message;
+            }
+            quoraEmitter.emit(`progress-${jobId}`, { type: 'error', error: err.message });
+        }
+    });
+
+    res.status(202).json({ jobId, message: 'Quora scraping job accepted for background execution.' });
+});
+
+app.get('/api/quora/status', (req, res) => {
+    const { jobId } = req.query;
+    const state = activeQuoraLogs.get(jobId);
+
+    if (!state) {
+        return res.status(404).json({ error: 'Quora job ID not found or not actively streaming.' });
+    }
+
+    res.writeHead(200, {
+        'Content-Type':  'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection':    'keep-alive'
+    });
+
+    state.logs.forEach(log => {
+        res.write(`data: ${JSON.stringify(log)}\n\n`);
+    });
+
+    if (state.status === 'completed') {
+        res.write(`data: ${JSON.stringify({ type: 'result', data: state.result })}\n\n`);
+        return res.end();
+    }
+    if (state.status === 'failed') {
+        res.write(`data: ${JSON.stringify({ type: 'error', error: state.error })}\n\n`);
+        return res.end();
+    }
+
+    const onProgress = (data) => {
+        res.write(`data: ${JSON.stringify(data)}\n\n`);
+        if (data.type === 'result' || data.type === 'error') {
+            quoraEmitter.removeListener(`progress-${jobId}`, onProgress);
+            res.end();
+        }
+    };
+
+    quoraEmitter.on(`progress-${jobId}`, onProgress);
+
+    req.on('close', () => {
+        quoraEmitter.removeListener(`progress-${jobId}`, onProgress);
+    });
+});
+
+app.get('/api/quora/jobs', (req, res) => {
+    try {
+        const jobs = db.prepare('SELECT * FROM quora_jobs ORDER BY created_at DESC').all();
+        res.json(jobs);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.get('/api/quora/jobs/:id/results', (req, res) => {
+    try {
+        const rows = db.prepare(
+            'SELECT * FROM quora_results WHERE job_id = ? ORDER BY depth ASC, scraped_at ASC'
+        ).all(req.params.id);
+
+        const formatted = rows.map(r => ({
+            id:          r.id,
+            url:         r.url,
+            sourceUrl:   r.source_url,
+            depth:       r.depth,
+            author:      r.author,
+            title:       r.title,
+            content:     r.content,
+            upvotes:     r.upvotes,
             scrapedAt:   r.scraped_at
         }));
 

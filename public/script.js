@@ -4,19 +4,22 @@ let finalExtractedData = null;
 const navNewCrawl  = document.getElementById('nav-new-crawl');
 const navNewsCrawl = document.getElementById('nav-news-crawl');
 const navTwitter   = document.getElementById('nav-twitter');
+const navQuora     = document.getElementById('nav-quora');
 const navHistory   = document.getElementById('nav-history');
 
 const viewCrawl    = document.getElementById('view-crawl');
 const viewNews     = document.getElementById('view-news');
 const viewTwitter  = document.getElementById('view-twitter');
+const viewQuora    = document.getElementById('view-quora');
 const viewHistory  = document.getElementById('view-history');
 const historyContainer = document.getElementById('history-container');
 
 function switchView(viewName) {
-    [navNewCrawl, navNewsCrawl, navTwitter, navHistory].forEach(el => el.classList.remove('active'));
+    [navNewCrawl, navNewsCrawl, navTwitter, navQuora, navHistory].forEach(el => el.classList.remove('active'));
     viewCrawl.style.display   = 'none';
     viewNews.style.display    = 'none';
     viewTwitter.style.display = 'none';
+    viewQuora.style.display   = 'none';
     viewHistory.style.display = 'none';
 
     if (viewName === 'crawl') {
@@ -28,6 +31,9 @@ function switchView(viewName) {
     } else if (viewName === 'twitter') {
         navTwitter.classList.add('active');
         viewTwitter.style.display = 'grid';
+    } else if (viewName === 'quora') {
+        navQuora.classList.add('active');
+        viewQuora.style.display = 'grid';
     } else if (viewName === 'history') {
         navHistory.classList.add('active');
         viewHistory.style.display = 'grid';
@@ -38,6 +44,7 @@ function switchView(viewName) {
 navNewCrawl.addEventListener('click',  () => switchView('crawl'));
 navNewsCrawl.addEventListener('click', () => switchView('news'));
 navTwitter.addEventListener('click',   () => switchView('twitter'));
+navQuora.addEventListener('click',     () => switchView('quora'));
 navHistory.addEventListener('click',   () => switchView('history'));
 
 // Duplicate extraction form bindings specifically for 'extract-news-form'
@@ -85,24 +92,54 @@ window.toggleEngineMode = function () {
 async function loadJobHistory() {
     historyContainer.innerHTML = '<span style="color: var(--primary);">Fetching SQLite archive...</span>';
     try {
-        const response = await fetch('/api/jobs');
-        const jobs = await response.json();
+        const [coreRes, twitterRes, quoraRes] = await Promise.all([
+            fetch('/api/jobs').catch(() => ({ ok: false })),
+            fetch('/api/twitter/jobs').catch(() => ({ ok: false })),
+            fetch('/api/quora/jobs').catch(() => ({ ok: false }))
+        ]);
 
-        if (!jobs || jobs.length === 0) {
+        const coreJobs    = coreRes.ok ? await coreRes.json() : [];
+        const twitterJobs = twitterRes.ok ? await twitterRes.json() : [];
+        const quoraJobs   = quoraRes.ok ? await quoraRes.json() : [];
+
+        const allJobs = [];
+
+        if (Array.isArray(coreJobs)) {
+            coreJobs.forEach(j => allJobs.push({
+                ...j, type: 'core', title: j.url, detail: `Goal: ${j.prompt}`
+            }));
+        }
+        if (Array.isArray(twitterJobs)) {
+            twitterJobs.forEach(j => allJobs.push({
+                ...j, type: 'twitter', title: j.seed_url || 'Twitter Query', detail: `Depth: ${j.depth}`
+            }));
+        }
+        if (Array.isArray(quoraJobs)) {
+            quoraJobs.forEach(j => allJobs.push({
+                ...j, type: 'quora', title: j.seed_url || 'Quora URL', detail: `Depth: ${j.depth}`
+            }));
+        }
+
+        allJobs.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        if (allJobs.length === 0) {
             historyContainer.innerHTML = '<span style="color: var(--primary); opacity: 0.8;">No completed jobs found. Initialize your first extraction!</span>';
             return;
         }
 
-        historyContainer.innerHTML = jobs.map(job => `
-            <div style="background: rgba(255,255,255,0.6); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+        historyContainer.innerHTML = allJobs.map(job => `
+            <div style="background: rgba(255,255,255,0.6); border: 1px solid var(--glass-border); padding: 1.5rem; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 1rem;">
                 <div style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 60%;">
-                    <h4 style="color: var(--text-dark); font-family: 'Inter', sans-serif;">${job.url}</h4>
-                    <pre style="padding: 0; background: transparent; color: var(--primary); font-size: 0.85rem; max-height: unset; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Goal: ${job.prompt}</pre>
+                    <h4 style="color: var(--text-dark); font-family: 'Inter', sans-serif;">
+                        ${job.type === 'twitter' ? '🐦 ' : job.type === 'quora' ? '🔴 ' : '🤖 '}
+                        ${job.title}
+                    </h4>
+                    <pre style="padding: 0; background: transparent; color: var(--primary); font-size: 0.85rem; max-height: unset; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${job.detail}</pre>
                     <span style="font-size: 0.8rem; color: #888;">Status: <b>${job.status.toUpperCase()}</b> • Scraped ${new Date(job.created_at).toLocaleString()}</span>
                 </div>
                 <div style="display: flex; gap: 0.5rem;">
-                    <button onclick="downloadHistoryJSON('${job.id}')" class="btn secondary" style="padding: 0.6rem 1rem; font-size: 0.85rem;">Download JSON</button>
-                    <button onclick="downloadHistoryCSV('${job.id}')" class="btn outline" style="padding: 0.6rem 1rem; font-size: 0.85rem; border: 2px solid var(--primary-light) !important;">Download CSV</button>
+                    <button onclick="downloadHistoryJSON('${job.id}', '${job.type}')" class="btn secondary" style="padding: 0.6rem 1rem; font-size: 0.85rem;">Download JSON</button>
+                    <button onclick="downloadHistoryCSV('${job.id}', '${job.type}')" class="btn outline" style="padding: 0.6rem 1rem; font-size: 0.85rem; border: 2px solid var(--primary-light) !important;">Download CSV</button>
                 </div>
             </div>
         `).join('');
@@ -343,13 +380,29 @@ document.getElementById('btn-export-news-json').addEventListener('click', () => 
 document.getElementById('btn-export-news-csv').addEventListener('click',  () => initiateDownload(finalNewsExtractedData, 'csv'));
 
 // Download Handlers (History Async Pane)
-window.downloadHistoryJSON = async (jobId) => {
-    const res = await fetch(`/api/jobs/${jobId}/export`);
-    initiateDownload(await res.json(), 'json');
+window.downloadHistoryJSON = async (jobId, type = 'core') => {
+    let endpoint = `/api/jobs/${jobId}/export`;
+    if (type === 'twitter') endpoint = `/api/twitter/jobs/${jobId}/results`;
+    if (type === 'quora') endpoint = `/api/quora/jobs/${jobId}/results`;
+
+    const res = await fetch(endpoint);
+    const data = await res.json();
+
+    if (type === 'twitter') return initiateTwitterDownload(data, 'json');
+    if (type === 'quora') return initiateQuoraDownload(data, 'json');
+    initiateDownload(data, 'json');
 };
-window.downloadHistoryCSV = async (jobId) => {
-    const res = await fetch(`/api/jobs/${jobId}/export`);
-    initiateDownload(await res.json(), 'csv');
+window.downloadHistoryCSV = async (jobId, type = 'core') => {
+    let endpoint = `/api/jobs/${jobId}/export`;
+    if (type === 'twitter') endpoint = `/api/twitter/jobs/${jobId}/results`;
+    if (type === 'quora') endpoint = `/api/quora/jobs/${jobId}/results`;
+
+    const res = await fetch(endpoint);
+    const data = await res.json();
+
+    if (type === 'twitter') return initiateTwitterDownload(data, 'csv');
+    if (type === 'quora') return initiateQuoraDownload(data, 'csv');
+    initiateDownload(data, 'csv');
 };
 
 // ── Twitter / X Scraper Logic ─────────────────────────────────────────────────
@@ -547,4 +600,196 @@ function initiateTwitterDownload(dataArray, type = 'json') {
 
 document.getElementById('btn-export-twitter-json').addEventListener('click', () => initiateTwitterDownload(finalTwitterData, 'json'));
 document.getElementById('btn-export-twitter-csv').addEventListener('click',  () => initiateTwitterDownload(finalTwitterData, 'csv'));
+
+// ── Quora Scraper Logic ───────────────────────────────────────────────────────
+
+const quoraDepthSlider = document.getElementById('quora-depth');
+const quoraDepthLabel  = document.getElementById('quora-depth-label');
+if (quoraDepthSlider) {
+    quoraDepthSlider.addEventListener('input', () => {
+        quoraDepthLabel.textContent = quoraDepthSlider.value;
+        quoraDepthLabel.style.transform = 'scale(1.2)';
+        setTimeout(() => { quoraDepthLabel.style.transform = 'scale(1)'; }, 150);
+    });
+}
+
+let finalQuoraData  = null;
+let activeQuoraJobId = null;
+let activeQuoraSSE   = null;
+
+function resetQuoraUI() {
+    const submitBtn = document.getElementById('quora-submit-btn');
+    const stopBtn   = document.getElementById('quora-stop-btn');
+    submitBtn.disabled = false;
+    submitBtn.classList.remove('btn-loading');
+    stopBtn.style.display = 'none';
+    activeQuoraJobId = null;
+    if (activeQuoraSSE) { activeQuoraSSE.close(); activeQuoraSSE = null; }
+}
+
+document.getElementById('quora-stop-btn').addEventListener('click', async () => {
+    if (!activeQuoraJobId) return;
+    const stopBtn     = document.getElementById('quora-stop-btn');
+    const statusBadge = document.getElementById('quora-status-badge');
+    const jsonOutput  = document.getElementById('quora-json-output');
+
+    stopBtn.disabled  = true;
+    stopBtn.textContent = 'Stopping...';
+
+    try {
+        await fetch(`/api/quora/jobs/${activeQuoraJobId}/cancel`, { method: 'DELETE' });
+    } catch (_) {}
+
+    jsonOutput.textContent += `\n[STOPPED] Job cancelled by user.`;
+    statusBadge.className   = 'badge error';
+    statusBadge.textContent = 'Stopped';
+
+    const exportSection = document.getElementById('quora-export-section');
+    const postCountEl   = document.getElementById('quora-post-count');
+    if (finalQuoraData && finalQuoraData.length > 0) {
+        postCountEl.textContent = `📝 ${finalQuoraData.length} post${finalQuoraData.length !== 1 ? 's' : ''} collected (partial)`;
+        if (exportSection) exportSection.style.display = 'flex';
+    }
+    resetQuoraUI();
+});
+
+document.getElementById('extract-quora-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const urlInput      = document.getElementById('quora-url').value;
+    const depthInput    = document.getElementById('quora-depth').value;
+    const maxDuration   = document.getElementById('quora-max-duration').value;
+    const submitBtn     = document.getElementById('quora-submit-btn');
+    const stopBtn       = document.getElementById('quora-stop-btn');
+    const statusBadge   = document.getElementById('quora-status-badge');
+    const jsonOutput    = document.getElementById('quora-json-output');
+    const exportSection = document.getElementById('quora-export-section');
+    const postCountEl   = document.getElementById('quora-post-count');
+
+    finalQuoraData     = null;
+    activeQuoraJobId   = null;
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('btn-loading');
+    stopBtn.style.display = 'flex';
+    stopBtn.disabled      = false;
+    stopBtn.innerHTML     = '<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg> Stop';
+    statusBadge.className    = 'badge processing';
+    statusBadge.textContent  = 'Scraping';
+    jsonOutput.style.color   = '#FFF';
+
+    const durationLabel = maxDuration === '0' ? 'No limit' : `${maxDuration}h max`;
+    jsonOutput.textContent = `Connecting to Quora scraper cluster...\nSeed: ${urlInput}\nDepth: ${depthInput}  |  Duration: ${durationLabel}\n${'─'.repeat(50)}\n`;
+    if (exportSection) exportSection.style.display = 'none';
+
+    try {
+        const response = await fetch('/api/quora/scrape', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                url:               urlInput,
+                depth:             parseInt(depthInput, 10),
+                maxDurationHours:  parseFloat(maxDuration),
+            })
+        });
+
+        const config = await response.json();
+        if (!response.ok) throw new Error(config.error || 'Server rejected Quora scrape request');
+
+        const jobId = config.jobId;
+        activeQuoraJobId = jobId;
+        jsonOutput.textContent += `[SYSTEM] Job ${jobId} started. Streaming progress...\n`;
+
+        try {
+            activeQuoraSSE = new EventSource(`/api/quora/status?jobId=${jobId}`);
+
+            activeQuoraSSE.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+
+                if (data.type === 'progress') {
+                    const prefix = data.status ? `[${data.status.toUpperCase()}] ` : '';
+                    jsonOutput.textContent += `${prefix}${data.message}\n`;
+                    jsonOutput.parentElement.scrollTop = jsonOutput.parentElement.scrollHeight;
+
+                    const match = data.message.match(/total: (\d+)/);
+                    if (match) postCountEl.textContent = `📝 ${match[1]} posts so far...`;
+
+                } else if (data.type === 'result') {
+                    finalQuoraData = data.data;
+                    const count = Array.isArray(data.data) ? data.data.length : 0;
+
+                    statusBadge.className  = 'badge success';
+                    statusBadge.textContent = 'Complete';
+                    jsonOutput.style.color  = '#DCCCAC';
+                    jsonOutput.textContent += `\n${'═'.repeat(50)}\n📝 SCRAPED ${count} POSTS\n${'═'.repeat(50)}\n`;
+                    jsonOutput.textContent += JSON.stringify(data.data, null, 2);
+                    postCountEl.textContent = `📝 ${count} post${count !== 1 ? 's' : ''} collected`;
+
+                    resetQuoraUI();
+                    if (exportSection) exportSection.style.display = 'flex';
+                    jsonOutput.parentElement.scrollTop = jsonOutput.parentElement.scrollHeight;
+
+                } else if (data.type === 'error') {
+                    throw new Error(data.error);
+                }
+            };
+
+            activeQuoraSSE.onerror = function () {
+                if (activeQuoraSSE && activeQuoraSSE.readyState === EventSource.CLOSED) return;
+                statusBadge.className  = 'badge error';
+                statusBadge.textContent = 'Stream Error';
+                jsonOutput.style.color  = '#E46464';
+                jsonOutput.textContent += `\n[SSE ERROR] Connection to server lost.`;
+                resetQuoraUI();
+            };
+
+        } catch (streamError) {
+            statusBadge.className  = 'badge error';
+            statusBadge.textContent = 'Failed';
+            jsonOutput.style.color  = '#E46464';
+            jsonOutput.textContent += `\n[FATAL] ${streamError.message}`;
+            resetQuoraUI();
+        }
+
+    } catch (networkError) {
+        statusBadge.className  = 'badge error';
+        statusBadge.textContent = 'Network Error';
+        jsonOutput.style.color  = '#E46464';
+        jsonOutput.textContent += `\n[NETWORK ERROR] ${networkError.message}`;
+        resetQuoraUI();
+    }
+});
+
+function initiateQuoraDownload(dataArray, type = 'json') {
+    if (!dataArray || dataArray.length === 0) {
+        alert('No Quora data available to export.');
+        return;
+    }
+    if (type === 'json') {
+        const blob = new Blob([JSON.stringify(dataArray, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `quora_data_${Date.now()}.json`;
+        link.click();
+    } else {
+        const flat = dataArray.map(t => ({
+            url:          t.url        || '',
+            source_url:   t.sourceUrl  || '',
+            depth:        t.depth      || 1,
+            author:       t.author     || '',
+            title:        t.title      || '',
+            content:      t.content    || '',
+            upvotes:      t.upvotes    || ''
+        }));
+        const csvString = Papa.unparse(flat);
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `quora_data_${Date.now()}.csv`;
+        link.click();
+    }
+}
+
+document.getElementById('btn-export-quora-json').addEventListener('click', () => initiateQuoraDownload(finalQuoraData, 'json'));
+document.getElementById('btn-export-quora-csv').addEventListener('click',  () => initiateQuoraDownload(finalQuoraData, 'csv'));
 

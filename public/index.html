@@ -44,6 +44,12 @@
         </svg>
         Twitter / X
       </li>
+      <li id="nav-quora">
+        <svg fill="currentColor" viewBox="0 0 24 24">
+          <path d="M11.961 1.706C5.356 1.706 0 6.643 0 12.72c0 2.808 1.155 5.372 3.056 7.37L1.87 23.332a.56.56 0 0 0 .692.693l3.652-1.22c1.722.617 3.652.951 5.747.951 1.258 0 2.476-.178 3.633-.52a5.454 5.454 0 0 0-1.4-3.13l-.066-.08-1.503 1.055a4.87 4.87 0 0 1-2.665.736c-4.485 0-8.117-3.66-8.117-8.188 0-4.512 3.632-8.17 8.117-8.17 4.484 0 8.1 3.658 8.1 8.17 0 1.956-.632 3.823-1.843 5.312l-1.026.046c-.536 0-1.052.179-1.472.5a5.441 5.441 0 0 0-2.072 3.238c.677 1.832 1.936 3.036 3.731 3.032.536 0 1.053-.179 1.472-.5a5.4 5.4 0 0 0 2.055-3.322c1.196-1.528 1.905-3.468 1.905-5.548 0-6.077-5.368-11.014-11.986-11.014z"/>
+        </svg>
+        Quora Crawler
+      </li>
       <li id="nav-history">
         <svg fill="currentColor" viewBox="0 0 20 20">
           <path fill-rule="evenodd"
@@ -340,6 +346,104 @@
             JSON
           </button>
           <button type="button" id="btn-export-twitter-csv" class="btn outline export-btn">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
+            CSV
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- NEW: Quora Scraper View -->
+    <main class="dashboard-grid" id="view-quora" style="display: none;">
+      <div class="card form-card glass-panel">
+        <form id="extract-quora-form">
+          <div class="card-header">
+            <h3 style="display:flex;align-items:center;gap:10px;">
+              <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24" style="color:var(--quora-red)">
+                <path d="M11.961 1.706C5.356 1.706 0 6.643 0 12.72c0 2.808 1.155 5.372 3.056 7.37L1.87 23.332a.56.56 0 0 0 .692.693l3.652-1.22c1.722.617 3.652.951 5.747.951 1.258 0 2.476-.178 3.633-.52a5.454 5.454 0 0 0-1.4-3.13l-.066-.08-1.503 1.055a4.87 4.87 0 0 1-2.665.736c-4.485 0-8.117-3.66-8.117-8.188 0-4.512 3.632-8.17 8.117-8.17 4.484 0 8.1 3.658 8.1 8.17 0 1.956-.632 3.823-1.843 5.312l-1.026.046c-.536 0-1.052.179-1.472.5a5.441 5.441 0 0 0-2.072 3.238c.677 1.832 1.936 3.036 3.731 3.032.536 0 1.053-.179 1.472-.5a5.4 5.4 0 0 0 2.055-3.322c1.196-1.528 1.905-3.468 1.905-5.548 0-6.077-5.368-11.014-11.986-11.014z"/>
+              </svg>
+              Quora Crawler
+            </h3>
+            <p style="font-size:0.85rem;margin-top:0.5rem;opacity:0.8;">Cookie-authenticated scraper. Extracts answers natively via DOM scrolling.</p>
+          </div>
+
+          <div class="input-group">
+            <label for="quora-url">Seed URL (Question, Feed, Search)</label>
+            <input type="url" id="quora-url" name="quora-url"
+              placeholder="https://www.quora.com/What-is-the-best-way-to-learn-JavaScript"
+              required autocomplete="off">
+          </div>
+
+          <div class="input-group">
+            <label for="quora-depth">Crawl Depth</label>
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <input type="range" id="quora-depth" name="quora-depth" min="1" max="5" value="1"
+                style="flex:1;height:6px;cursor:pointer;">
+              <span id="quora-depth-label" class="quora-depth-badge">1</span>
+            </div>
+            <div class="depth-hint">
+              <span>1 = Seed page only</span>
+              <span>2+ = + Related questions</span>
+            </div>
+          </div>
+
+          <!-- ── Crawl Limits row ─────────────────────────────────── -->
+          <div class="input-group">
+            <label for="quora-max-duration">Max Duration</label>
+            <select id="quora-max-duration"
+              style="width:100%;padding:0.55rem 0.9rem;border-radius:8px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:inherit;font-size:0.9rem;cursor:pointer;margin-top:0.5rem;">
+              <option value="0">No limit</option>
+              <option value="0.25">15 minutes</option>
+              <option value="1">1 hour</option>
+              <option value="4">4 hours</option>
+              <option value="8">8 hours</option>
+              <option value="24">24 hours</option>
+            </select>
+          </div>
+
+          <!-- ── Action buttons ──────────────────────────────────── -->
+          <div style="display:flex;gap:0.8rem;align-items:center;margin-top:0.5rem;">
+            <button type="submit" id="quora-submit-btn" class="btn primary quora-btn" style="flex:1;">
+              <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M11.961 1.706C5.356 1.706 0 6.643 0 12.72c0 2.808 1.155 5.372 3.056 7.37L1.87 23.332a.56.56 0 0 0 .692.693l3.652-1.22c1.722.617 3.652.951 5.747.951 1.258 0 2.476-.178 3.633-.52a5.454 5.454 0 0 0-1.4-3.13l-.066-.08-1.503 1.055a4.87 4.87 0 0 1-2.665.736c-4.485 0-8.117-3.66-8.117-8.188 0-4.512 3.632-8.17 8.117-8.17 4.484 0 8.1 3.658 8.1 8.17 0 1.956-.632 3.823-1.843 5.312l-1.026.046c-.536 0-1.052.179-1.472.5a5.441 5.441 0 0 0-2.072 3.238c.677 1.832 1.936 3.036 3.731 3.032.536 0 1.053-.179 1.472-.5a5.4 5.4 0 0 0 2.055-3.322c1.196-1.528 1.905-3.468 1.905-5.548 0-6.077-5.368-11.014-11.986-11.014z"/>
+              </svg>
+              <span class="btn-text">Start Quora Scrape</span>
+              <div class="spinner"></div>
+            </button>
+
+            <button type="button" id="quora-stop-btn" class="btn" style="display:none;background:rgba(220,60,60,0.15);border:1px solid rgba(220,60,60,0.4);color:#ff6b6b;gap:0.5rem;white-space:nowrap;padding:0.7rem 1.2rem;border-radius:10px;cursor:pointer;font-weight:600;transition:all 0.2s;">
+              <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+                <rect x="6" y="6" width="12" height="12" rx="2"/>
+              </svg>
+              Stop
+            </button>
+          </div>
+        </form>
+
+      </div>
+
+      <div class="card results-card glass-panel">
+        <div class="results-header">
+          <h2>Answers Stream</h2>
+          <span class="badge" id="quora-status-badge">Awaiting URL</span>
+        </div>
+
+        <div class="code-window">
+          <div class="mac-buttons">
+            <span></span><span></span><span></span>
+            <span class="terminal-title">bash — quora-scraper</span>
+          </div>
+          <pre><code id="quora-json-output">Ready — enter a Quora URL above...</code></pre>
+        </div>
+
+        <div class="terminal-footer" id="quora-export-section"
+          style="display:none; margin-top:1.5rem; gap:0.8rem; justify-content:flex-end;">
+          <div id="quora-post-count" class="quora-post-count-chip"></div>
+          <button type="button" id="btn-export-quora-json" class="btn secondary export-btn">
+            <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v3.586L7.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 10.586V7z" clip-rule="evenodd"/></svg>
+            JSON
+          </button>
+          <button type="button" id="btn-export-quora-csv" class="btn outline export-btn">
             <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/></svg>
             CSV
           </button>
