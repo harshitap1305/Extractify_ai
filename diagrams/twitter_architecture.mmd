@@ -1,0 +1,35 @@
+flowchart LR
+    U[User Dashboard\nTwitter Tab] --> FE[Frontend script.js]
+    FE --> API[POST /api/twitter/scrape]
+    API --> JOB[Twitter Job Registry\nstatus + logs + cancellation]
+    JOB --> TWF[TwitterWorkflow.js]
+    TWF --> TS[TwitterScraper.js]
+
+    TS --> BROWSER[Puppeteer + Stealth Browser]
+    BROWSER --> COOKIES[Cookie Bootstrap from .env]
+    BROWSER --> NAV[URL Classifier\nhome/profile/search/tweet]
+    BROWSER --> RESP[Network Interception\nResponse Hook]
+
+    RESP --> GQL[GraphQL JSON Payloads]
+    GQL --> PARSE[Recursive Tweet Parser]
+    PARSE --> DEDUP[Global Dedup Set]
+
+    TS --> SCROLL[Adaptive Scroll + Random Pauses]
+    TS --> FANOUT[Depth Fan-out\nprofile <-> tweet thread]
+    TS --> LIMITS[maxDurationMs + maxTweetsPerUrl]
+    TS --> RESTART[Periodic Browser Restart]
+
+    DEDUP --> DATA[Tweet Records]
+    SCROLL --> DATA
+    FANOUT --> DATA
+
+    DATA --> TWF
+    TWF --> TX[Transactional Insert]
+    TX --> DB[(SQLite\ntwitter_jobs + twitter_results)]
+
+    JOB --> SSE[SSE /api/twitter/status]
+    SSE --> FE
+    DB --> FE
+
+    FE --> CANCEL[DELETE /api/twitter/jobs/:id/cancel]
+    CANCEL --> JOB

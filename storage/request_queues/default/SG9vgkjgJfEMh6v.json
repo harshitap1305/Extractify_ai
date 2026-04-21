@@ -1,9 +1,0 @@
-{
-	"id": "SG9vgkjgJfEMh6v",
-	"json": "{\"id\":\"SG9vgkjgJfEMh6v\",\"url\":\"https://internshala.com/internships/content-writing-internship/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships/content-writing-internship/\",\"uniqueKey\":\"https://internshala.com/internships/content-writing-internship\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:02:54.989Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/internships/content-writing-internship",
-	"url": "https://internshala.com/internships/content-writing-internship/?utm_source=is_menu_dropdown"
-}

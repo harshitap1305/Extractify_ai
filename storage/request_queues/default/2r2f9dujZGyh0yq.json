@@ -1,9 +1,0 @@
-{
-	"id": "2r2f9dujZGyh0yq",
-	"json": "{\"id\":\"2r2f9dujZGyh0yq\",\"url\":\"https://internshala.com/internships/part-time-jobs/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships/part-time-jobs/\",\"uniqueKey\":\"https://internshala.com/internships/part-time-jobs\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:04:01.158Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/internships/part-time-jobs",
-	"url": "https://internshala.com/internships/part-time-jobs/?utm_source=is_menu_dropdown"
-}

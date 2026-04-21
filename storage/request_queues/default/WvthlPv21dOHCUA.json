@@ -1,9 +1,0 @@
-{
-	"id": "WvthlPv21dOHCUA",
-	"json": "{\"id\":\"WvthlPv21dOHCUA\",\"url\":\"https://internshala.com/contact\",\"loadedUrl\":\"https://internshala.com/contact\",\"uniqueKey\":\"https://internshala.com/contact\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:50.015Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/contact",
-	"url": "https://internshala.com/contact"
-}

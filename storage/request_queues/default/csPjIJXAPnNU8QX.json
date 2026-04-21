@@ -1,9 +1,0 @@
-{
-	"id": "csPjIJXAPnNU8QX",
-	"json": "{\"id\":\"csPjIJXAPnNU8QX\",\"url\":\"https://internshala.com/internships-by-category/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships-by-category/\",\"uniqueKey\":\"https://internshala.com/internships-by-category\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:04:52.917Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/internships-by-category",
-	"url": "https://internshala.com/internships-by-category/?utm_source=is_menu_dropdown"
-}

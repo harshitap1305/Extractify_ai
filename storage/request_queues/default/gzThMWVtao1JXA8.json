@@ -1,9 +1,0 @@
-{
-	"id": "gzThMWVtao1JXA8",
-	"json": "{\"id\":\"gzThMWVtao1JXA8\",\"url\":\"https://trainings.internshala.com/?utm_source=is_web_internshala_ham\",\"loadedUrl\":\"https://trainings.internshala.com/?utm_source=is_web_internshala_ham\",\"uniqueKey\":\"https://trainings.internshala.com\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:17.967Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://trainings.internshala.com",
-	"url": "https://trainings.internshala.com/?utm_source=is_web_internshala_ham"
-}

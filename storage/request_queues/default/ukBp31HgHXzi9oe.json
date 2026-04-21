@@ -1,9 +1,0 @@
-{
-	"id": "ukBp31HgHXzi9oe",
-	"json": "{\"id\":\"ukBp31HgHXzi9oe\",\"url\":\"https://internshala.com/internships/internship-in-bangalore/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships/internship-in-bangalore/\",\"uniqueKey\":\"https://internshala.com/internships/internship-in-bangalore\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:56:01.486Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/internships/internship-in-bangalore",
-	"url": "https://internshala.com/internships/internship-in-bangalore/?utm_source=is_menu_dropdown"
-}

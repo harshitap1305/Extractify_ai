@@ -1,0 +1,41 @@
+flowchart LR
+    U[User Dashboard] --> FE[Frontend: public/index.html + script.js]
+    FE --> API[Express API: /api/extract]
+    API --> JOB[Job Manager + In-Memory Status]
+    JOB --> WF[Workflow.js]
+
+    WF --> Q[Request Queue]
+    WF --> MODE{Mode}
+    MODE -->|Fast| CH[Crawlee Cheerio Crawler]
+    MODE -->|Deep| PU[Puppeteer Fetcher]
+
+    CH --> CL[Cleaner.js\nReadability + Fallback DOM Cleanup]
+    PU --> CL
+
+    CL --> EX{Extraction Strategy}
+    EX -->|AI| LLM[SinglePromptExtractor.js\nGroq LLM + Bottleneck + Retry]
+    EX -->|Deterministic| DET[Rule/Schema Extraction]
+
+    LLM --> RES[Normalized Result]
+    DET --> RES
+
+    RES --> DB[(SQLite\nJobs + Results\nWAL Mode)]
+    RES --> SSE[SSE Event Stream]
+    DB --> EXP[CSV/JSON Export]
+    SSE --> FE
+    EXP --> FE
+
+    API --> CANCEL[Cancellation Set]
+    CANCEL --> WF
+
+    subgraph Reliability Controls
+      CAP[maxRequestsPerCrawl]
+      DEP[Depth Limit + Same-Domain Link Filter]
+      TRUNC[Text Truncation Before LLM]
+      ABORT[Abort Heavy Resources]
+    end
+
+    CAP --> WF
+    DEP --> WF
+    TRUNC --> LLM
+    ABORT --> PU

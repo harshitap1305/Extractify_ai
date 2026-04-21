@@ -1,9 +1,0 @@
-{
-	"id": "xJ8dUrMN53ptsha",
-	"json": "{\"id\":\"xJ8dUrMN53ptsha\",\"url\":\"https://internshala.com/login/forgot_password\",\"loadedUrl\":\"https://internshala.com/login/forgot_password\",\"uniqueKey\":\"https://internshala.com/login/forgot_password\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:54:59.118Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/login/forgot_password",
-	"url": "https://internshala.com/login/forgot_password"
-}

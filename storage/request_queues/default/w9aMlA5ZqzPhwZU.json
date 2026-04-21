@@ -1,9 +1,0 @@
-{
-	"id": "w9aMlA5ZqzPhwZU",
-	"json": "{\"id\":\"w9aMlA5ZqzPhwZU\",\"url\":\"https://internshala.com/jobs/jobs-in-pune/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/jobs/jobs-in-pune/\",\"uniqueKey\":\"https://internshala.com/jobs/jobs-in-pune\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:07:31.173Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/jobs/jobs-in-pune",
-	"url": "https://internshala.com/jobs/jobs-in-pune/?utm_source=is_menu_dropdown"
-}

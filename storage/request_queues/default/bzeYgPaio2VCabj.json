@@ -1,9 +1,0 @@
-{
-	"id": "bzeYgPaio2VCabj",
-	"json": "{\"id\":\"bzeYgPaio2VCabj\",\"url\":\"https://internshala.com/terms\",\"loadedUrl\":\"https://internshala.com/terms\",\"uniqueKey\":\"https://internshala.com/terms\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:02.700Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/terms",
-	"url": "https://internshala.com/terms"
-}

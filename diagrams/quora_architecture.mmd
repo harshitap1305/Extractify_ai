@@ -1,0 +1,34 @@
+flowchart LR
+    U[User Dashboard\nQuora Tab] --> FE[Frontend script.js]
+    FE --> API[POST /api/quora/scrape]
+    API --> JOB[Quora Job Registry\nstatus + logs + cancellation]
+    JOB --> QWF[QuoraWorkflow.js]
+    QWF --> QS[QuoraScraper.js]
+
+    QS --> BROWSER[Puppeteer + Stealth Browser]
+    BROWSER --> COOKIES[Quora Cookies from .env]
+    BROWSER --> LOGIN[Login-Wall Detection]
+
+    QS --> EXPAND[Expand Hidden/Collapsed Content]
+    QS --> DOM[Dynamic DOM Extraction\nauthor + title + content + upvotes]
+    QS --> SCROLL[Iterative Scroll\nStability/No-New Detection]
+    QS --> LINKS[Related Link Fan-out]
+
+    QS --> LIMITS[Depth + Max URLs + Duration Cap]
+    QS --> CANCEL[Cancellation Checkpoints]
+    QS --> RESTART[Periodic Browser Restart]
+
+    DOM --> DATA[Normalized Quora Records]
+    EXPAND --> DATA
+    LINKS --> DATA
+
+    DATA --> QWF
+    QWF --> TX[Transactional Insert]
+    TX --> DB[(SQLite\nquora_jobs + quora_results)]
+
+    JOB --> SSE[SSE /api/quora/status]
+    SSE --> FE
+    DB --> FE
+
+    FE --> STOP[DELETE /api/quora/jobs/:id/cancel]
+    STOP --> JOB

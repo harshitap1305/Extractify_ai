@@ -1,9 +1,0 @@
-{
-	"id": "U4fGgPB98sN3N7E",
-	"json": "{\"id\":\"U4fGgPB98sN3N7E\",\"url\":\"https://internshala.com/internships/ppo-true/?utm_source=is_menu_dropdown\",\"loadedUrl\":\"https://internshala.com/internships/ppo-true/\",\"uniqueKey\":\"https://internshala.com/internships/ppo-true\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T06:03:16.805Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/internships/ppo-true",
-	"url": "https://internshala.com/internships/ppo-true/?utm_source=is_menu_dropdown"
-}

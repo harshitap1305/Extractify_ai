@@ -1,0 +1,35 @@
+flowchart LR
+    U[User Dashboard\nNews Tab] --> FE[Frontend script.js]
+    FE --> API[POST /api/extract\nmode: news/non-AI]
+    API --> JOB[Job Manager]
+    JOB --> WF[Workflow.js]
+
+    WF --> Q[Request Queue + Seed URL]
+    WF --> CRAWL[Crawlee Cheerio or Puppeteer\nBased on page complexity]
+    CRAWL --> FETCH[Fetcher.js\nAbort image/media/font]
+
+    FETCH --> CLEAN[Cleaner.js]
+    CLEAN --> READ[Mozilla Readability\nTitle + Date + Body]
+    READ --> FALLBACK[Fallback DOM Cleanup\nif Readability fails]
+
+    FALLBACK --> RESULT[Deterministic Article Record]
+    RESULT --> DB[(SQLite\njobs + results)]
+    RESULT --> SSE[SSE Status Stream]
+
+    DB --> EXPORT[Export JSON/CSV]
+    EXPORT --> FE
+    SSE --> FE
+
+    subgraph Safety and Control
+      DEPTH[Depth Limit]
+      DOMAIN[Same-Domain Link Extraction]
+      MAXREQ[maxRequestsPerCrawl]
+      ERR[Per-URL Error Capture]
+      CANCEL[Cancellation Check]
+    end
+
+    DEPTH --> WF
+    DOMAIN --> WF
+    MAXREQ --> WF
+    ERR --> WF
+    CANCEL --> WF

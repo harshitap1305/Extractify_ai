@@ -1,9 +1,0 @@
-{
-	"id": "QRsPTapiqe0vwgm",
-	"json": "{\"id\":\"QRsPTapiqe0vwgm\",\"url\":\"https://internshala.com/jobs\",\"loadedUrl\":\"https://internshala.com/jobs/\",\"uniqueKey\":\"https://internshala.com/jobs\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":2,\"__crawlee\":{\"crawlDepth\":1,\"enqueueStrategy\":\"same-domain\",\"state\":4}},\"handledAt\":\"2026-04-12T05:55:14.920Z\"}",
-	"method": "GET",
-	"orderNo": null,
-	"retryCount": 0,
-	"uniqueKey": "https://internshala.com/jobs",
-	"url": "https://internshala.com/jobs"
-}

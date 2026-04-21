@@ -1,0 +1,9 @@
+{
+	"id": "TOZVVbAnBZ3SGX4",
+	"json": "{\"id\":\"TOZVVbAnBZ3SGX4\",\"url\":\"https://www.nation.com.pk/\",\"loadedUrl\":\"https://www.nation.com.pk/\",\"uniqueKey\":\"https://www.nation.com.pk\",\"method\":\"GET\",\"noRetry\":false,\"retryCount\":0,\"errorMessages\":[],\"headers\":{},\"userData\":{\"depth\":1,\"__crawlee\":{\"state\":4}},\"handledAt\":\"2026-04-21T17:31:02.927Z\"}",
+	"method": "GET",
+	"orderNo": null,
+	"retryCount": 0,
+	"uniqueKey": "https://www.nation.com.pk",
+	"url": "https://www.nation.com.pk/"
+}
